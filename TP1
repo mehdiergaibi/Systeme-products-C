@@ -1,0 +1,238 @@
+#include <stdio.h>
+#include <string.h>
+
+typedef struct Article {
+
+    int Code;
+    char Designation[20];
+    float Prix;
+    int Quantite;
+
+} Articles;
+
+Articles TA[100];
+int N = 0;
+
+void AjoutA( Articles A ){
+    int isExisted = 0;
+    for( int i = 0; i < N; i++ ){ // check if the element is exosted
+        if( TA[i].Code == A.Code ){
+            TA[i].Quantite += A.Quantite;
+            printf("la quatit a change\n");
+            isExisted = 1;
+            break;
+        }
+    }
+    if( isExisted == 0 ){ // add element if it s not existed
+        TA[N].Code = A.Code;
+        strcpy(TA[N].Designation , A.Designation);
+        TA[N].Prix = A.Prix;
+        TA[N].Quantite = A.Quantite;
+        N++;
+        printf("code est %d\n", A.Code);
+        printf("l article a ete ajoute!!!\n");
+        printf("***************************\n");
+    }
+
+}
+
+void AfficherA(int cd){
+    int isExisted = 0;
+    for( int i = 0; i < N; i++ ){
+        if( TA[i].Code == cd ){ // if existed print the article
+            printf("***************************\n");
+            printf("le code est: %d\n", TA[i].Code);
+            printf("la designation est: %s", TA[i].Designation);
+            printf("le prix est est: %f\n", TA[i].Prix);
+            printf("la quatiteest est: %d\n", TA[i].Quantite);
+            printf("***************************\n");
+            isExisted =1;
+            break;
+        }
+    }
+    if( isExisted == 0 ){ // if its not existed print this
+        printf("aucun element de code: %d est valable\n", cd);
+    }
+}
+
+void VenteA(int cd, int qt){
+    int isExisted = 0;
+    for( int i = 0; i < N; i++ ){
+        if( TA[i].Code == cd ){ // if existed do this
+            if( qt <= TA[i].Quantite ){
+                TA[i].Quantite -= qt;
+                printf("la vente done\n");
+                printf("la quatite actuelle est: %d\n", TA[i].Quantite);
+                printf("*****************************************\n");
+            } else {
+                printf("Vente annule car la quatite du produit %d est unsufisante\n", cd);
+                printf("*****************************************\n");
+            }
+        }
+        isExisted = 1;
+        break;
+    }
+    if( isExisted == 0 ){ // /Dif its not existed print this
+        printf("aucun element de code: %d est valable", cd);
+    }
+}
+
+float Mtotal(){
+
+    float totalAmount = 0;
+     for( int i = 0; i < N; i++ ){
+        totalAmount += TA[i].Prix * TA[i].Quantite;
+     }
+    return totalAmount;
+
+}
+
+void SupprimerA(){
+    for( int i = 0; i < N ; i++ ){
+        if( TA[i].Quantite == 0 ){
+            if( i == N - 1 ){
+                printf("article has been deleted\n");
+                N--;
+            } else {
+                for( int j = i; j < N -1; j++ ){
+                    TA[j] = TA[j + 1];
+                }
+                printf("article has been deleted\n");
+                N--;
+            }
+        }
+     }
+}
+
+void Qmin(int s){
+    for( int i = 0; i < N; i++ ){
+        if( TA[i].Quantite < s ){
+            printf("article %d :\n", i + 1);
+            printf("le code est: %d\n", TA[i].Code);
+            printf("la designation est: %s", TA[i].Designation);
+            printf("le prix est est: %f\n", TA[i].Prix);
+            printf("la quatiteest est: %d\n", TA[i].Quantite);
+            printf("*****************************************\n");
+
+        }
+     }
+}
+
+void Afficher(){
+    if( N <= 0 ){
+        printf("aucun articles!!!!!!\n");
+    } else {
+        for( int i = 0; i < N; i++ ){
+            printf("article %d est\n", i+1);
+            printf("le code est: %d\n", TA[i].Code);
+            printf("la designation est: %s", TA[i].Designation);
+            printf("le prix est est: %f\n", TA[i].Prix);
+            printf("la quatiteest est: %d\n", TA[i].Quantite);
+            printf("*****************************************\n");
+        }
+    }
+}
+
+int main(){
+
+    int choise;
+
+    printf("entrer nombre des articles: ");
+    scanf("%d", &N);
+    printf("***************************\n");
+
+    for( int i = 0; i <N; i++ ){
+        int codeArticle;
+        int isExist;
+        printf("article %d\n", i+1);
+        do{
+            isExist = 0;
+            printf("entrer son code ");
+            scanf("%d", &codeArticle);
+            for( int j = 0; j < N; j++ ){
+                if( codeArticle == TA[j].Code ){
+                    isExist =1;
+                    break;
+                }
+            }
+            if( isExist == 1 ){
+                printf("code deja existe changer le\n");
+            }
+        } while( isExist == 1 );
+        TA[i].Code = codeArticle;
+        getchar();
+        printf("entrer la designation: ");
+        fgets(TA[i].Designation,20, stdin );
+        printf("entrer le prix: ");
+        scanf("%f", &TA[i].Prix);
+        printf("entrer la quantite: ");
+        scanf("%d", &TA[i].Quantite);
+        printf("***************************\n");
+    }do{
+        printf("taper 1 pour ajouter un article\n");
+        printf("taper 2 pour afficher un article\n");
+        printf("taper 3 pour une operation de vente\n");
+        printf("taper 4 pour le mantant total des article\n");
+        printf("taper 5 pour supprimer les articles ayant une quantite nulle\n");
+        printf("taper 6 pour afficher les articles inf au suiel min\n");
+        printf("taper 7 pour afficher la liste des article\n");
+        printf("taper 0 pour quitter\n");
+        printf("***************************\n");
+
+        scanf("%d", &choise);
+
+        switch( choise ){
+            case 0:
+                printf("Aurevoiur fin du programme\n");
+                break;
+            case 1:
+                Articles A;
+                printf("entrer son code ");
+                scanf("%d", &A.Code);
+                getchar();
+                printf("entrer la designation: ");
+                fgets(A.Designation,20, stdin );
+                printf("entrer le prix: ");
+                scanf("%f", &A.Prix);
+                printf("entrer la quantite: ");
+                scanf("%d", &A.Quantite);
+                AjoutA(A);
+                break;
+            case 2:
+                int code;
+                printf("entrer son code ");
+                scanf("%d", &code);
+                AfficherA(code);
+                break;
+            case 3:
+                int cde, quantity;
+                printf("entrer son code ");
+                scanf("%d", &cde);
+                printf("entrer la quantite desirer ");
+                scanf("%d", &quantity);
+                VenteA(cde, quantity);
+                break;
+            case 4 : 
+                printf("%f\n" ,Mtotal()); 
+                printf("*****************************************\n");
+                break;
+            case 5 : SupprimerA(); break;
+            case 6 : 
+                int s;
+                printf("entrer le suil: ");
+                scanf("%d", &s);
+                Qmin(s);
+                break;
+            case 7: Afficher(); break;
+            default:
+                printf("Error de saisie!!!!!!!!!!!");
+        }
+
+
+    } while( choise != 0 );
+
+
+    
+
+    return 0;
+}
